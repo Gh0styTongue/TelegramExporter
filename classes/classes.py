@@ -4,8 +4,6 @@ from datetime import datetime
 class User:
 
     def __init__(self, pyrogram_user_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_user_obj.id
         self.is_bot = pyrogram_user_obj.is_bot
         self.first_name = "N.A." if pyrogram_user_obj.first_name is None else pyrogram_user_obj.first_name
@@ -15,24 +13,29 @@ class User:
 
     def to_string(self):
         return_string = ""
-
         return_string = return_string + self.username + "§"
         return_string = return_string + self.first_name + " " + self.last_name + "§"
         return_string = return_string + self.phone_number
-
         return return_string
+
+
+def format_date(date_obj):
+    _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+    if date_obj is None:
+        return ""
+    if isinstance(date_obj, int) or isinstance(date_obj, float):
+        return datetime.utcfromtimestamp(date_obj).strftime(_TIME_FORMAT)
+    return date_obj.strftime(_TIME_FORMAT)
 
 
 class Photo:
 
     def __init__(self, pyrogram_photo_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_photo_obj.file_id
         self.width = pyrogram_photo_obj.width
         self.height = pyrogram_photo_obj.height
         self.size = pyrogram_photo_obj.file_size
-        self.date = datetime.utcfromtimestamp(pyrogram_photo_obj.date).strftime(_TIME_FORMAT)
+        self.date = format_date(pyrogram_photo_obj.date)
         self.ttl_seconds = "" if pyrogram_photo_obj.ttl_seconds is None else str(pyrogram_photo_obj.ttl_seconds)
 
     def to_string(self):
@@ -47,21 +50,17 @@ class Photo:
 
 class Audio:
     def __init__(self, pyrogram_audio_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_audio_obj.file_id
         self.duration = pyrogram_audio_obj.duration
         self.file_name = "" if pyrogram_audio_obj.file_name is None else pyrogram_audio_obj.file_name
         self.mime_type = "" if pyrogram_audio_obj.mime_type is None else pyrogram_audio_obj.mime_type
         self.size = "" if pyrogram_audio_obj.file_size is None else str(pyrogram_audio_obj.file_size)
-        self.date = "" if pyrogram_audio_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_audio_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_audio_obj.date)
         self.performer = "" if pyrogram_audio_obj.performer is None else pyrogram_audio_obj.performer
         self.title = "" if pyrogram_audio_obj.title is None else pyrogram_audio_obj.title
 
     def to_string(self):
         return_string = "id = {}, duration = {}".format(self.id, self.duration)
-        # Optional fields
         return_string = return_string + ", File name = {}".format(self.file_name) \
             if self.file_name != "" else return_string
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
@@ -80,18 +79,14 @@ class Audio:
 
 class Document:
     def __init__(self, pyrogram_doc_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_doc_obj.file_id
         self.file_name = "" if pyrogram_doc_obj.file_name is None else pyrogram_doc_obj.file_name
         self.mime_type = "" if pyrogram_doc_obj.mime_type is None else pyrogram_doc_obj.mime_type
         self.size = "" if pyrogram_doc_obj.file_size is None else str(pyrogram_doc_obj.file_size)
-        self.date = "" if pyrogram_doc_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_doc_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_doc_obj.date)
 
     def to_string(self):
         return_string = "id = {}".format(self.id)
-        # Optional fields
         return_string = return_string + ", File name = {}".format(self.file_name) \
             if self.file_name != "" else return_string
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
@@ -106,8 +101,6 @@ class Document:
 
 class Sticker:
     def __init__(self, pyrogram_sticker_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_sticker_obj.file_id
         self.width = pyrogram_sticker_obj.width
         self.height = pyrogram_sticker_obj.height
@@ -115,15 +108,13 @@ class Sticker:
         self.file_name = "" if pyrogram_sticker_obj.file_name is None else pyrogram_sticker_obj.file_name
         self.mime_type = "" if pyrogram_sticker_obj.mime_type is None else pyrogram_sticker_obj.mime_type
         self.size = "" if pyrogram_sticker_obj.file_size is None else str(pyrogram_sticker_obj.file_size)
-        self.date = "" if pyrogram_sticker_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_sticker_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_sticker_obj.date)
         self.emoji = "" if pyrogram_sticker_obj.emoji is None else pyrogram_sticker_obj.emoji
         self.set_name = "" if pyrogram_sticker_obj.set_name is None else pyrogram_sticker_obj.set_name
 
     def to_string(self):
         return_string = "id = {}, width = {}, height = {}, is animated = {}".format(self.id, self.width,
                                                                                     self.height, self.is_animated)
-        # Optional fields
         return_string = return_string + ", File name = {}".format(self.file_name) \
             if self.file_name != "" else return_string
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
@@ -142,8 +133,6 @@ class Sticker:
 
 class Animation:
     def __init__(self, pyrogram_animation_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_animation_obj.file_id
         self.width = pyrogram_animation_obj.width
         self.height = pyrogram_animation_obj.height
@@ -151,13 +140,11 @@ class Animation:
         self.file_name = "" if pyrogram_animation_obj.file_name is None else pyrogram_animation_obj.file_name
         self.mime_type = "" if pyrogram_animation_obj.mime_type is None else pyrogram_animation_obj.mime_type
         self.size = "" if pyrogram_animation_obj.file_size is None else str(pyrogram_animation_obj.file_size)
-        self.date = "" if pyrogram_animation_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_animation_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_animation_obj.date)
 
     def to_string(self):
         return_string = "id = {}, width = {}, height = {}, duration = {}".format(self.id, self.width,
                                                                                  self.height, self.duration)
-        # Optional fields
         return_string = return_string + ", File name = {}".format(self.file_name) \
             if self.file_name != "" else return_string
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
@@ -172,8 +159,6 @@ class Animation:
 
 class Game:
     def __init__(self, pyrogram_game_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_game_obj.file_id
         self.title = pyrogram_game_obj.title
         self.short_name = pyrogram_game_obj.short_name
@@ -185,7 +170,6 @@ class Game:
         return_string = "id = {}, title = {}, short name = {}, " \
                         "description = {}, photo meta-data = {}".format(self.id, self.title, self.short_name,
                                                                         self.description, Photo(self.photo).to_string())
-        # Optional fields
         return_string = return_string + ", Animation = {}".format(Animation(self.animation).to_string()) \
             if self.animation != "" else return_string
 
@@ -194,8 +178,6 @@ class Game:
 
 class Video:
     def __init__(self, pyrogram_video_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_video_obj.file_id
         self.width = pyrogram_video_obj.width
         self.height = pyrogram_video_obj.height
@@ -205,14 +187,12 @@ class Video:
         self.supports_streaming = "" if pyrogram_video_obj.supports_streaming is None \
             else pyrogram_video_obj.supports_streaming
         self.size = "" if pyrogram_video_obj.file_size is None else str(pyrogram_video_obj.file_size)
-        self.date = "" if pyrogram_video_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_video_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_video_obj.date)
         self.ttl_seconds = "" if pyrogram_video_obj.ttl_seconds is None else pyrogram_video_obj.ttl_seconds
 
     def to_string(self):
         return_string = "id = {}, width = {}, height = {}, duration = {}".format(self.id, self.width,
                                                                                  self.height, self.duration)
-        # Optional fields
         return_string = return_string + ", File name = {}".format(self.file_name) \
             if self.file_name != "" else return_string
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
@@ -231,18 +211,14 @@ class Video:
 
 class Voice:
     def __init__(self, pyrogram_voice_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_voice_obj.file_id
         self.duration = pyrogram_voice_obj.duration
         self.mime_type = "" if pyrogram_voice_obj.mime_type is None else pyrogram_voice_obj.mime_type
         self.size = "" if pyrogram_voice_obj.file_size is None else str(pyrogram_voice_obj.file_size)
-        self.date = "" if pyrogram_voice_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_voice_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_voice_obj.date)
 
     def to_string(self):
         return_string = "id = {}, duration = {}".format(self.id, self.duration)
-        # Optional fields
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
             if self.mime_type != "" else return_string
         return_string = return_string + ", Size = {}".format(self.size) \
@@ -255,19 +231,15 @@ class Voice:
 
 class Videonote:
     def __init__(self, pyrogram_videonote_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_videonote_obj.file_id
         self.length = pyrogram_videonote_obj.length
         self.duration = pyrogram_videonote_obj.duration
         self.mime_type = "" if pyrogram_videonote_obj.mime_type is None else pyrogram_videonote_obj.mime_type
         self.size = "" if pyrogram_videonote_obj.file_size is None else str(pyrogram_videonote_obj.file_size)
-        self.date = "" if pyrogram_videonote_obj.date is None else \
-            str(datetime.utcfromtimestamp(pyrogram_videonote_obj.date).strftime(_TIME_FORMAT))
+        self.date = format_date(pyrogram_videonote_obj.date)
 
     def to_string(self):
         return_string = "id = {}, length = {}, duration = {}".format(self.id, self.length, self.duration)
-        # Optional fields
         return_string = return_string + ", Mime type = {}".format(self.mime_type) \
             if self.mime_type != "" else return_string
         return_string = return_string + ", Size = {}".format(self.size) \
@@ -280,8 +252,6 @@ class Videonote:
 
 class Contact:
     def __init__(self, pyrogram_contact_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.phone_number = pyrogram_contact_obj.phone_number
         self.first_name = pyrogram_contact_obj.first_name
         self.last_name = "" if pyrogram_contact_obj.last_name is None else pyrogram_contact_obj.last_name
@@ -290,7 +260,6 @@ class Contact:
 
     def to_string(self):
         return_string = "Phone Number = {}, First name = {}".format(self.phone_number, self.first_name)
-        # Optional fields
         return_string = return_string + ", Last name = {}".format(self.last_name) \
             if self.last_name != "" else return_string
         return_string = return_string + ", User Id = {}".format(self.user_id) \
@@ -314,8 +283,6 @@ class Location:
 
 class Venue:
     def __init__(self, pyrogram_venue_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.longitude = pyrogram_venue_obj.longitude
         self.title = pyrogram_venue_obj.title
         self.address = pyrogram_venue_obj.address
@@ -323,9 +290,7 @@ class Venue:
         self.foursquare_type = "" if pyrogram_venue_obj.foursquare_type is None else pyrogram_venue_obj.foursquare_type
 
     def to_string(self):
-        return_string = "Longitude = {}, Title = {}, Address = {}".format(self.longitude, self.title, self.address,
-                                                                          self.is_animated)
-        # Optional fields
+        return_string = "Longitude = {}, Title = {}, Address = {}".format(self.longitude, self.title, self.address)
         return_string = return_string + ", Foursquare id = {}".format(self.foursquare_id) \
             if self.foursquare_id != "" else return_string
         return_string = return_string + ", Foursquare type = {}".format(self.foursquare_type) \
@@ -336,8 +301,6 @@ class Venue:
 
 class WebPage:
     def __init__(self, pyrogram_web_page_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_web_page_obj.file_id
         self.url = pyrogram_web_page_obj.url
         self.display_url = pyrogram_web_page_obj.display_url
@@ -359,7 +322,6 @@ class WebPage:
 
     def to_string(self):
         return_string = "id = {}, URL = {}, Displayed URL = {}".format(self.id, self.url, self.display_url)
-        # Optional fields
         return_string = return_string + ", Type = {}".format(self.type) \
             if self.type != "" else return_string
         return_string = return_string + ", Site name = {}".format(self.site_name) \
@@ -396,8 +358,6 @@ class WebPage:
 
 class Poll:
     def __init__(self, pyrogram_poll_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.id = pyrogram_poll_obj.id
         self.question = pyrogram_poll_obj.question
         self.options = pyrogram_poll_obj.options
@@ -413,7 +373,6 @@ class Poll:
         return_string = "Id = {}, Question = {}, Options = {}, " \
                         "Num of voters = {}, Is closed = {}".format(self.id, self.question, self.options,
                                                                     self.total_voter_count, self.is_closed)
-        # Optional fields
         return_string = return_string + ", Type = {}".format(self.type) \
             if self.type != "" else return_string
         return_string = return_string + ", Is anonymous = {}".format(self.is_anonymous) \
@@ -428,8 +387,6 @@ class Poll:
 
 class Dice:
     def __init__(self, pyrogram_dice_obj):
-        _TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
         self.emoji = pyrogram_dice_obj.emoji
         self.value = pyrogram_dice_obj.value
 
@@ -449,4 +406,3 @@ class BColor:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-
